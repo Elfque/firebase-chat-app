@@ -1,5 +1,5 @@
 "use client";
-
+import { BsPersonCircle } from "react-icons/bs";
 import { auth } from "@/firebase/firebaseconfig";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -14,12 +14,14 @@ const Navbar = ({ profile }) => {
       </div>
       <div className="flex gap-4 items-center">
         <div className="picture">
-          {profile && (
+          {profile?.photoURL ? (
             <img
               src={profile?.photoURL}
               alt=""
               className="w-10 h-10 rounded-full object-cover"
             />
+          ) : (
+            <BsPersonCircle className="w-10 h-10 rounded-full object-cover text-zinc-500" />
           )}
         </div>
         <div className="option">

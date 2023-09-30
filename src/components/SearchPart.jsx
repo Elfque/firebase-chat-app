@@ -47,7 +47,7 @@ const SearchPart = () => {
           onChange={(e) => setSeachQuery(e.target.value)}
         />
       </form>
-      <div className="searched">
+      <div className="searched px-4">
         {searchResult.length > 0 &&
           searchResult?.map((searched) => (
             <ChatSingle

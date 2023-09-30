@@ -41,7 +41,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className="col-span-7 h-full bg-blue-950">
+        <div className="col-span-7 h-full bg-zinc-800">
           <div className="w-full h-full flex justify-center items-center text-6xl text-gray-500">
             Select A Chat
           </div>

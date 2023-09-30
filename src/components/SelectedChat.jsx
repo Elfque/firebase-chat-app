@@ -15,6 +15,7 @@ import { db } from "@/firebase/firebaseconfig";
 import { v4 } from "uuid";
 import elfStore from "@/state/state";
 import Loader from "./Loader";
+import { BsPersonCircle } from "react-icons/bs";
 
 const SelectedChat = ({ selected, chatId }) => {
   const { user, profile } = elfStore();
@@ -113,16 +114,21 @@ const SelectedChat = ({ selected, chatId }) => {
   return (
     <div className="grid grid-rows-message h-full">
       <div className="topp flex items-center gap-4 p-2 bg-zinc-900">
-        {/* <div className="topp flex items-center gap-4 p-2 bg-darkBg"> */}
-        <img
-          src={selected?.photoURL}
-          alt=""
-          className="w-8 h-8 rounded-full object-cover"
-        />
+        {selected?.photoURL ? (
+          <img
+            src={selected?.photoURL}
+            alt=""
+            className="w-8 h-8 rounded-full object-cover"
+          />
+        ) : (
+          <BsPersonCircle className="w-10 h-10 rounded-full object-cover text-zinc-500" />
+        )}
         <div className="name text-blue-100">{selected?.userName}</div>
       </div>
       {loading ? (
-        <Loader />
+        <div className="w-full h-full flex justify-center items-center">
+          <Loader />
+        </div>
       ) : (
         <div className="messages p-2">
           {messages?.map((message) => (
@@ -139,7 +145,7 @@ const SelectedChat = ({ selected, chatId }) => {
           <textarea
             name="messageText"
             id="message"
-            className="w-full col-span-10 resize-none rounded-lg bg-transparent outline-none text-zinc-400"
+            className="w-full col-span-10 resize-none bg-transparent outline-none text-zinc-400"
             placeholder="Type a Message"
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}

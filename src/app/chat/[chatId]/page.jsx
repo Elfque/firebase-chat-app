@@ -50,10 +50,17 @@ const Page = () => {
           <SearchPart />
 
           {/* Chats */}
-          <div className="divide-y-[1px] divide-blue-900 mt-2 px-4">
-            {profile?.userChats.map((chat, idx) => (
-              <ChatSingle chat={chat} key={idx} click={handleSelect} />
-            ))}
+          <div className="mt-2 px-4">
+            {profile?.userChats
+              .sort((a, b) => b.time - a.time)
+              .map((chat, idx) => (
+                <ChatSingle
+                  chat={chat}
+                  key={idx}
+                  click={handleSelect}
+                  chatId={chatId}
+                />
+              ))}
           </div>
         </div>
         <div className="col-span-7 h-full bg-zinc-800">

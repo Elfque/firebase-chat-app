@@ -1,6 +1,7 @@
 import elfStore from "@/state/state";
 
 const Message = ({ message }) => {
+  // console.log(message.date);
   const { user } = elfStore();
 
   return (
