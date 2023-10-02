@@ -1,4 +1,6 @@
 "use client";
+
+import { useDropzone } from "react-dropzone";
 import Message from "./Message";
 import { useEffect, useState } from "react";
 import { LuSendHorizonal } from "react-icons/lu";
@@ -11,17 +13,40 @@ import {
   setDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "@/firebase/firebaseconfig";
+import { db, storage } from "@/firebase/firebaseconfig";
 import { v4 } from "uuid";
 import elfStore from "@/state/state";
 import Loader from "./Loader";
-import { BsPersonCircle } from "react-icons/bs";
+import { BsPersonCircle, BsImage } from "react-icons/bs";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const SelectedChat = ({ selected, chatId }) => {
   const { user, profile } = elfStore();
   const [messageText, setMessageText] = useState("");
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState(null);
+  const [file, setFile] = useState(null);
+  const [displayed, setDisplayed] = useState(null);
+
+  const acceptedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+
+  const onDrop = (accepted) => {
+    setFile(accepted[0]);
+    if (accepted) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setDisplayed(e.target.result);
+      };
+      reader.readAsDataURL(accepted[0]);
+    } else {
+      setDisplayed(null);
+    }
+  };
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: acceptedImageTypes.join(","),
+    multiple: false,
+  });
 
   const getSelected = async () => {
     const combined = chatId > user.uid ? chatId + user.uid : user.uid + chatId;
@@ -40,6 +65,11 @@ const SelectedChat = ({ selected, chatId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (messageText.trim() === "") {
+      alert("Input cannot be empty");
+      return;
+    }
     const combined = chatId > user.uid ? chatId + user.uid : user.uid + chatId;
 
     const docRef = doc(db, "chats", combined);
@@ -92,16 +122,36 @@ const SelectedChat = ({ selected, chatId }) => {
       const chatRef = doc(db, "chats", combined);
       await setDoc(chatRef, { messages: [] });
     }
+    ////////////////////////////////////////
+    if (file) {
+      const imageRef = ref(storage, file.name);
 
-    await updateDoc(doc(db, "chats", combined), {
-      messages: arrayUnion({
-        uid: v4(),
-        text: messageText,
-        senderId: user.uid,
-        date: Timestamp.now(),
-      }),
-    });
+      uploadBytesResumable(imageRef, file).then(() => {
+        getDownloadURL(imageRef).then(async (downloadURL) => {
+          await updateDoc(doc(db, "chats", combined), {
+            messages: arrayUnion({
+              uid: v4(),
+              text: messageText,
+              senderId: user.uid,
+              date: Timestamp.now(),
+              photoURL: downloadURL,
+            }),
+          });
+        });
+      });
+    } else {
+      await updateDoc(doc(db, "chats", combined), {
+        messages: arrayUnion({
+          uid: v4(),
+          text: messageText,
+          senderId: user.uid,
+          date: Timestamp.now(),
+        }),
+      });
+    }
     setMessageText("");
+    setDisplayed(null);
+    setFile(null);
   };
 
   useEffect(() => {
@@ -112,7 +162,7 @@ const SelectedChat = ({ selected, chatId }) => {
   }, [selected, user]);
 
   return (
-    <div className="grid grid-rows-message h-full">
+    <div className="grid grid-rows-message h-screen overflow-y-hidden">
       <div className="topp flex items-center gap-4 p-2 bg-zinc-900">
         {selected?.photoURL ? (
           <img
@@ -130,10 +180,12 @@ const SelectedChat = ({ selected, chatId }) => {
           <Loader />
         </div>
       ) : (
-        <div className="messages p-2">
-          {messages?.map((message) => (
-            <Message message={message} key={message.uid} />
-          ))}
+        <div className="message overflow-y-auto h-auto">
+          <div className="messages p-2">
+            {messages?.map((message) => (
+              <Message message={message} key={message.uid} />
+            ))}
+          </div>
         </div>
       )}
 
@@ -150,7 +202,23 @@ const SelectedChat = ({ selected, chatId }) => {
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
           />
-          <button className="col-span-2 text-center w-full h-10 flex justify-center items-center">
+          <div className="bg-transparent h-20 flex justify-center items-center over transform duration-300">
+            <div {...getRootProps()} className="flex justify-center">
+              <input {...getInputProps()} />
+              <p className="bg-transparent h-20 flex justify-center items-center cursor-pointer text-white">
+                {displayed ? (
+                  <img
+                    src={displayed}
+                    alt=""
+                    className="h-16 w-16 object-cover"
+                  />
+                ) : (
+                  <BsImage className="text-3xl text-zinc-400" />
+                )}
+              </p>
+            </div>
+          </div>
+          <button className="text-center w-full h-10 flex justify-center items-center">
             <LuSendHorizonal className="text-white mx-auto text-3xl" />
           </button>
         </form>

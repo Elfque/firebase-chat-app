@@ -19,6 +19,9 @@ module.exports = {
       gridTemplateRows: {
         message: "4rem 1fr 5rem",
       },
+      gridTemplateColumns: {
+        chat: "20rem 1fr",
+      },
     },
   },
   plugins: [],

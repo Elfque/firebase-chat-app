@@ -26,8 +26,8 @@ export default function Home() {
 
   return (
     <div>
-      <div className="grid grid-cols-10 h-screen">
-        <div className="col-span-3 h-full">
+      <div className="grid grid-cols-chat h-screen">
+        <div className="h-full">
           {/* TOP TITLE */}
           <Navbar profile={profile} />
 
@@ -41,7 +41,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className="col-span-7 h-full bg-zinc-800">
+        <div className="h-full bg-zinc-800">
           <div className="w-full h-full flex justify-center items-center text-6xl text-gray-500">
             Select A Chat
           </div>

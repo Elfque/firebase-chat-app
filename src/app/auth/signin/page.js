@@ -6,6 +6,7 @@ import { auth } from "@/firebase/firebaseconfig";
 import { useRouter } from "next/navigation";
 import Input from "@/components/Input";
 import Link from "next/link";
+import ButtonLoader from "@/components/ButtonLoader";
 
 const SignIn = () => {
   const navigate = useRouter();
@@ -13,17 +14,21 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const change = (e) =>
     setDetails({ ...details, [e.target.name]: e.target.value });
 
   const signIn = (e) => {
     e.preventDefault();
+    setLoading(true);
     signInWithEmailAndPassword(auth, details.email, details.password)
       .then(() => {
+        setLoading(false);
         navigate.push("/");
       })
       .catch((error) => {
+        setLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
         const email = error.customData;
@@ -57,8 +62,9 @@ const SignIn = () => {
         </div>
         <button
           onClick={signIn}
-          className="bg-blue-200 font-semibold py-1 px-10 rounded-md"
+          className="bg-zinc-200 font-semibold py-1 px-10 rounded-md flex items-center gap-3 justify-center"
         >
+          {loading && <ButtonLoader />}
           Sign In
         </button>
       </form>

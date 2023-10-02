@@ -49,6 +49,12 @@ body {
 .under:hover .over {
   @apply opacity-75;
 }
+.message {
+  height: calc(100vh - 9rem);
+}
+::-webkit-scrollbar {
+  display: none;
+}
 
 /* LOADER */
 .loader {
@@ -89,5 +95,25 @@ body {
   }
   100% {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
+}
+
+.loader-button {
+  width: 15px;
+  height: 15px;
+  border: 2px solid;
+  border-color: #0a0a0a transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
+import ButtonLoader from "@/components/ButtonLoader";
 
 const SignUp = () => {
   const [details, setDetails] = useState({
@@ -18,6 +19,7 @@ const SignUp = () => {
     userName: "",
     photoURL: null,
   });
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const navigate = useRouter();
 
@@ -35,6 +37,7 @@ const SignUp = () => {
 
   const signUp = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (
       details.email.trim === "" ||
@@ -58,7 +61,6 @@ const SignUp = () => {
 
         uploadBytesResumable(imageRef, file).then(() => {
           getDownloadURL(imageRef).then(async (downloadURL) => {
-            // setDetails({ ...details, photoURL: downloadURL });
             await setDoc(doc(db, "users", uid), {
               email,
               photoURL: downloadURL,
@@ -66,11 +68,13 @@ const SignUp = () => {
               uid,
               userChats: [],
             });
+            setLoading(false);
             navigate.push("/");
           });
         });
       })
       .catch((error) => {
+        setLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
         const email = error.customData.email;
@@ -130,8 +134,9 @@ const SignUp = () => {
         </div>
         <button
           onClick={signUp}
-          className="bg-blue-200 font-semibold py-1 px-10 rounded-md"
+          className="bg-zinc-200 font-semibold py-1 px-10 rounded-md flex items-center gap-3 justify-center"
         >
+          {loading && <ButtonLoader />}
           Sign Up
         </button>
       </form>

@@ -41,8 +41,8 @@ const Page = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-10 h-screen">
-        <div className="col-span-3 h-full">
+      <div className="grid grid-cols-chat h-screen">
+        <div className="h-full">
           {/* TOP TITLE */}
           <Navbar profile={profile} />
 
@@ -63,7 +63,7 @@ const Page = () => {
               ))}
           </div>
         </div>
-        <div className="col-span-7 h-full bg-zinc-800">
+        <div className="h-full bg-zinc-800">
           <SelectedChat selected={selectedChat} chatId={chatId} />
         </div>
       </div>
