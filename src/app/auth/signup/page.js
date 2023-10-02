@@ -84,6 +84,7 @@ const SignUp = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <form action="" className="w-[90%] max-w-sm">
+        <div className="font-semibold text-3xl text-zinc-200">Sign Up</div>
         <Input
           name="email"
           type={"email"}
@@ -113,11 +114,11 @@ const SignUp = () => {
           labelText={"Confirm Password"}
           change={change}
         />
-        <div className="bg-blue-900 w-full h-20 flex justify-center items-center over transform duration-300">
+        <div className="bg-zinc-700 w-full h-20 flex justify-center items-center over transform duration-300">
           <div {...getRootProps()} className="flex justify-center">
             <input {...getInputProps()} />
-            <p className="bg-blue-900 h-20 w-full flex justify-center items-center">
-              {file ? file.name : "Choose your profile picture"}
+            <p className="bg-zinc-700 h-20 w-full flex justify-center items-center cursor-pointer text-white">
+              {file ? file.name : "Choose your permanent profile picture"}
             </p>
           </div>
         </div>

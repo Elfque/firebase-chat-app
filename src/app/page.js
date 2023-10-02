@@ -35,7 +35,7 @@ export default function Home() {
           <SearchPart />
 
           {/* Chats */}
-          <div className="divide-y-[1px] mt-2 px-4">
+          <div className="mt-2 px-4">
             {profile?.userChats.map((chat, idx) => (
               <ChatSingle chat={chat} key={idx} click={handleSelect} />
             ))}

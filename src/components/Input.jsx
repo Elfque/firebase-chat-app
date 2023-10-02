@@ -14,7 +14,7 @@ const Input = ({ name, type, change, value, labelText }) => {
       </label>
       <input
         type={type}
-        className="sign_input text-sm px-2 border-b-2 border-blue-200 w-full max-w-md"
+        className="sign_input text-sm px-2 border-b-2 border-zinc-200 w-full max-w-md"
         onFocus={() => setActive(true)}
         onBlur={() => setActive(false)}
         onChange={change}

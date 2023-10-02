@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db, provider } from "@/firebase/firebaseconfig";
+import { auth } from "@/firebase/firebaseconfig";
 import { useRouter } from "next/navigation";
 import Input from "@/components/Input";
 import Link from "next/link";
@@ -20,9 +20,7 @@ const SignIn = () => {
   const signIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, details.email, details.password)
-      .then(async (result) => {
-        const user = result.user;
-
+      .then(() => {
         navigate.push("/");
       })
       .catch((error) => {
@@ -36,7 +34,7 @@ const SignIn = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <form action="" className="w-[90%] max-w-sm">
-        <div className="font-semibold text-3xl text-blue-200">Sign In</div>
+        <div className="font-semibold text-3xl text-zinc-200">Sign In</div>
         <Input
           name="email"
           type={"email"}

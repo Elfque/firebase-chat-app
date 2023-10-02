@@ -13,11 +13,11 @@ const elfStore = create((set) => ({
       if (user) {
         const uid = user.uid;
         console.log(user);
-        set((store) => ({ user: user }));
+
+        set((store) => ({ user: user, error: null }));
 
         const docRef = doc(db, "users", user.uid);
         onSnapshot(docRef, (doc) => {
-          // const docSnap = await getDoc(docRef);
           set((store) => ({ profile: doc.data() }));
         });
       } else {
